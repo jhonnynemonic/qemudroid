@@ -10,6 +10,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Descomprimir proyecto
+        run: |
+          if [ -f QemuDroid-proyecto.zip ]; then
+            unzip -o QemuDroid-proyecto.zip -x '.github/*'
+          fi
+          ls -la
+
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
