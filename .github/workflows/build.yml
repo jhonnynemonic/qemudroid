@@ -9,10 +9,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Descomprimir el proyecto
+      - name: Descomprimir el proyecto (el zip subido más reciente)
         run: |
-          if [ -f QemuDroid-proyecto.zip ]; then unzip -o QemuDroid-proyecto.zip -x '.github/*'; fi
+          ls -la *.zip || true
+          # solo el zip subido o cambiado más recientemente (según el historial de git)
+          Z=$(git log --format= --name-only --diff-filter=AM -- '*.zip' | awk 'NF' | while read -r f; do [ -f "$f" ] && echo "$f" && break; done)
+          if [ -z "$Z" ]; then Z=$(ls *.zip 2>/dev/null | head -1); fi
+          if [ -n "$Z" ]; then echo "Descomprimiendo: $Z"; unzip -o -q "$Z" -x '.github/*'; fi
+          grep -h "versionName" app/build.gradle
 
       - uses: actions/setup-java@v4
         with:
