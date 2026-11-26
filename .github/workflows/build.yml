@@ -21,6 +21,10 @@ jobs:
           if [ -n "$Z" ]; then echo "Descomprimiendo: $Z"; unzip -o -q "$Z" -x '.github/*'; fi
           grep -h "versionName" app/build.gradle
 
+      - name: Descargar QEMU para Android (arm64, de Termux)
+        continue-on-error: true
+        run: python3 tools/fetch_qemu.py
+
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
