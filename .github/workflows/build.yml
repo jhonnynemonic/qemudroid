@@ -10,12 +10,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Descomprimir proyecto
+      - name: Descomprimir el proyecto
         run: |
-          if [ -f QemuDroid-proyecto.zip ]; then
-            unzip -o QemuDroid-proyecto.zip -x '.github/*'
-          fi
-          ls -la
+          if [ -f QemuDroid-proyecto.zip ]; then unzip -o QemuDroid-proyecto.zip -x '.github/*'; fi
+
+      - name: Descargar QEMU para Android (arm64, de Termux)
+        continue-on-error: true
+        run: python3 tools/fetch_qemu.py
 
       - uses: actions/setup-java@v4
         with:
